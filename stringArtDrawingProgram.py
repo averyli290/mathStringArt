@@ -18,7 +18,9 @@ import math
 ####
 # [ ] Pop-up window for each option
 ####
-# [ ] UPLOAD TO GitHub !!!!!!!!!
+
+
+# [ ] UPDATE TO GitHub !!!!!!!!!
 
 
 class DrawingProgram(Canvas):
@@ -27,7 +29,9 @@ class DrawingProgram(Canvas):
         self.grid(row=0, column=0)
         self.clist = []
         self.totalclist = []
-
+        self.savestate = []
+        self.color = "black"
+        self.movemade = [False, 0]
     def drawCurve(self, a, b, conv, spacing, color="black", bgcolor=None, deviation="in", width=1):
         verta = []
         vertb = []
@@ -135,24 +139,50 @@ class DrawingProgram(Canvas):
 
 
     def leftClick(self, event):
-        self.clist.append((event.x, event.y))
+        self.clist.append(self.searchSimilarCoord((event.x, event.y)))
+        self.totalclist.append(self.searchSimilarCoord((event.x, event.y)))
         if len(self.clist) == 3:
-            self.totalclist.append((event.x, event.y))
+            self.movemade[0] = True
+            cursave = []
+            cursave.append(self.savestate)
+            cursave.append([self.clist[0], self.clist[2], self.clist[1], 20, "black", None, "out", 1])
+            self.savestate.append(cursave)
             self.drawCurve(self.clist[0], self.clist[2], self.clist[1], 20, "black", None, "out", 1)
             for i in range(len(self.clist)):
                 self.clist.remove(self.clist[0])
 
+            if self.movemade[1] > 0:
+                for n in range(len(self.savestate)-1-self.movemade[1], len(self.savestate)):
+                    self.savestate.remove(self.savestate[n])
+            self.movemade[1] = 0
+
     def rightClick(self, event):
         for i in range(len(self.clist)):
             self.clist.remove(self.clist[0])
-            #self.totalclist.remove()
+            #self.totalclist.remove(self.totalclist.index(self.clist[0]))
 
 
-
+    def searchSimilarCoord(self, c):
+        for coord in self.totalclist:
+            if (abs(coord[0]-c[0])**2 + abs(coord[1]-c[1])**2)**(1/2) <= 15:
+                return coord
+        return c
+'''
+    def undo(self, event):
+        #not working
+        if len(self.savestate) >= 2:
+            for curve in self.savestate[-1]:
+                print(curve[0])
+                self.drawCurve(curve[0], curve[1], curve[2], curve[3], curve[4], curve[5], curve[6], curve[7])
+                self.movemade[0] = False
+                self.movemade[1] += 1
+                print("what")
+'''
+    
 root = Tk()
 d = DrawingProgram(root, 600, 600)
 d.bind("<Button-1>", d.leftClick)
 d.bind("<Button-3>", d.rightClick)
-
+#d.bind("<Button-2>", d.undo)
 
 root.mainloop()

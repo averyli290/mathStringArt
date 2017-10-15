@@ -15,6 +15,7 @@ import math
 #
 # All necessary functions go into the class
 
+print("Please input the width and height of the desired window on different lines (regular is 600x600)")
 
 window_width = int(input())
 window_height = int(input())
@@ -118,7 +119,7 @@ def drawSquare(tl, br, color, spacing, bgcolor,  deviation="out", rotate=False):
             else:
                 drawCurve((tl[0], tl[1]), (br[0], br[1]), (tl[0], br[1]), spacing, color, bgcolor, deviation)
 
-######EXAMPLE FOR drawSurve FUNCTION######
+######EXAMPLE FOR drawSquare FUNCTION######
 #     Top left corner-|         |- Bottom right corner
 #                     |         |
 #                     |         |           |-Center of square
@@ -129,6 +130,25 @@ def drawSquare(tl, br, color, spacing, bgcolor,  deviation="out", rotate=False):
 #                 Rotating the square (basically the midpoint polygon)-|
 
 
+
+def drawPolygon(sides, radius, center, spacing, color, bgcolor, cdeviation, pdeviation, shift):
+    verticies = []
+    for angled in range(360):
+        angler = angled/180*math.pi
+        verticies.append((math.floor(center[0]+radius*math.cos(angler)), math.floor(center[1]+radius*math.sin(angler))))
+    if pdeviation == "in":
+        for i in range(0, sides):
+            drawCurve((verticies[(math.floor(i*360/sides)+shift)%len(verticies)][0], verticies[(math.floor(i*360/sides)+shift)%len(verticies)][1]), (verticies[(math.floor((i+1)*360/sides)+shift)%len(verticies)][0], verticies[(math.floor((i+1)*360/sides)+shift)%len(verticies)][1]), center, spacing, color, bgcolor, cdeviation)
+    else:
+        for i in range(0, sides):
+            drawCurve((verticies[(math.floor(i*360/sides)+shift)%len(verticies)][0], verticies[(math.floor(i*360/sides)+shift)%len(verticies)][1]), (verticies[(math.floor((i+2)*360/sides)+shift)%len(verticies)][0], verticies[(math.floor((i+2)*360/sides)+shift)%len(verticies)][1]), (verticies[(math.floor((i+1)*360/sides)+shift)%len(verticies)][0], verticies[(math.floor((i+1)*360/sides)+shift)%len(verticies)][1]), spacing, color, bgcolor, cdeviation)
+
+######EXAMPLE FOR drawPolygon######
+#                                                                   |The deviation of the polygon (have the curves meet in the center or not)
+#The deviation of the curves (explained in drawCurve function)|     |
+#      The number of lines for each side of each curve |      |     |    |How many degrees to rotate counterclockwise (constructed on a unit circle)
+#           Center of the polygon-V                    V      V     V    V
+#       drawPolygon(4, 200, (300, 300), 20, "black", None, "out", "out", 45)
 
 #Picture 1 (first picture on webpage): https://mathcraft.wonderhowto.com/news/more-string-art-0132077/
 def pic1(window_width, window_length, color1, color2):
@@ -171,4 +191,4 @@ def pic3(window_width, window_length):
         tl = (math.ceil((center[0]+tl[0])/2), math.ceil((center[1]+tl[1])/2))
         br = (math.ceil((center[0]+br[0])/2), math.ceil((center[1]+br[1])/2))
 
-pic3(window_width, window_height)
+#pic3(window_width, window_height)
