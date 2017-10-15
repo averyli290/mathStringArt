@@ -20,7 +20,6 @@ root = Tk()
 canv = Canvas(root, width=600, height=600)
 canv.grid(row=0, column=0)
 
-
 class painting(Canvas):
     def __init__ (self, root, painting, w, h):
         Canvas.__init__(self, root, width=w, height=h)

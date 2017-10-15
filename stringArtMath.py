@@ -14,6 +14,16 @@ import math
 #
 #
 # All necessary functions go into the class
+#
+#
+#
+#
+###########!!!!!!!!!!
+# Update the program with this version but with a class
+#  - add the new functions
+#  - change canv to self for the class stuff
+#  - make sure to add self to the functions (in parameters)
+#  - when using functions, make the class and then do name.function(parameters)
 
 print("Please input the width and height of the desired window on different lines (regular is 600x600)")
 
